@@ -434,10 +434,10 @@ app.post("/createblog",async(req,res)=>{
         const year = currentDate.getFullYear()
         req.body.publish_date = `${date}-${month}-${year}`
         console.log(req.body.publish_date)
-
-        const bloglength = await db.collection("blog").find().toArray()
-        console.log(bloglength.length)
-        req.body.blogid = bloglength.length + 1
+        req.body.reviews = []
+        // const bloglength = await db.collection("blog").find().toArray()
+        // console.log(bloglength.length)
+        // req.body.blogid = bloglength.length + 1
 
         const blog = await db.collection("blog").insertOne(req.body)
         res.json({message:"Blog created"})
@@ -491,7 +491,7 @@ app.get("/oneblog/:blogid",async(req,res)=>{
     try{
         const connection = await mongoClient.connect(URL)
         const db= connection.db("Blog_app")
-        const blog = await db.collection("blog").find({blogid:parseInt(req.params.blogid)}).toArray()
+        const blog = await db.collection("blog").find({_id:new mongodb.ObjectId (req.params.blogid)}).toArray()
         console.log(blog.length)
         if(blog.length === 1){
             res.json(blog)
@@ -511,10 +511,10 @@ app.put("/updateblog/:blogid",async(req,res)=>{
         const connection = await mongoClient.connect(URL)
         const db= connection.db("Blog_app")
       
-        const findblog = await db.collection("blog").find({blogid:parseInt(req.params.blogid)}).toArray()
+        const findblog = await db.collection("blog").find({_id:new mongodb.ObjectId (req.params.blogid)}).toArray()
         console.log(findblog.length)
         if(findblog.length === 1){
-            const updateblog = await db.collection("blog").updateOne({blogid:parseInt(req.params.blogid)},{$set:req.body})
+            const updateblog = await db.collection("blog").updateOne({_id:new mongodb.ObjectId (req.params.blogid)},{$set:req.body})
             res.json({message:"Blog is updated successfully"})
         }else{
             res.json({message:"Blogid is not found"})
@@ -531,9 +531,9 @@ app.put("/reviewblog/:blogid",async(req,res)=>{
     try{
         const connection = await mongoClient.connect(URL)
         const db= connection.db("Blog_app")
-        const blog = await db.collection("blog").findOne({blogid:parseInt(req.params.blogid)})
+        const blog = await db.collection("blog").findOne({_id:new mongodb.ObjectId (req.params.blogid)})
         if(blog){
-            const reviewblog = await db.collection("blog").updateOne({blogid:parseInt(req.params.blogid)},{$push:{reviews:req.body}})
+            const reviewblog = await db.collection("blog").updateOne({_id:new mongodb.ObjectId (req.params.blogid)},{$push:{reviews:req.body}})
             res.json({message:"Reviewed the blog"})
         }else{
             res.json({message:"Blogid is not found"})
@@ -557,7 +557,7 @@ app.delete("/deleteblog/:blogid",async(req,res)=>{
     try{
         const connection = await mongoClient.connect(URL)
         const db= connection.db("Blog_app")
-        const deleteblog = await db.collection("blog").deleteOne({blogid:parseInt(req.params.blogid)})
+        const deleteblog = await db.collection("blog").deleteOne({_id:new mongodb.ObjectId (req.params.blogid)})
         if(deleteblog){
             res.json({message:"Deleted the blog"})
         }else{
