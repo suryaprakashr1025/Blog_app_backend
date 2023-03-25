@@ -13,7 +13,7 @@ const JWT_SECRET = process.env.JWT_SECRET
 const app = express()
 
 app.use(cors({
-    origin:"https://master--silver-malasada-ff483c.netlify.app/",
+    origin:"https://master--silver-malasada-ff483c.netlify.app",
     
 }))
 app.use(express.json())
