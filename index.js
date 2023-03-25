@@ -13,9 +13,8 @@ const JWT_SECRET = process.env.JWT_SECRET
 const app = express()
 
 app.use(cors({
-    // origin: "http://localhost:3000",
     origin:"https://master--silver-malasada-ff483c.netlify.app/",
-    // origin: "*",
+    
 }))
 app.use(express.json())
 
